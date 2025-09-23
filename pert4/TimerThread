@@ -1,0 +1,26 @@
+// class yang merupakan bisa berjalan sebagai thread terpisah untuk mengatur jalannya jam tiap detik secara otomatis tanpa dipanggil manual
+public class TimerThread extends Thread {
+    private Clock clock;
+
+    // konstruktor 
+    public TimerThread(Clock clock) {
+        this.clock = clock;
+    }
+
+    // metode utama yang akan cek apakah jam masih aktif, kalo false berhenti, kalo running akan step lalu pause begitu terus sampai false
+    public void run() {
+        while (clock.isRunning()) {
+            clock.step();
+            pause();
+        }
+    }
+
+    // pause thread selama satu detik
+    private void pause() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException exc) {
+            // ignore
+        }
+    }
+}
