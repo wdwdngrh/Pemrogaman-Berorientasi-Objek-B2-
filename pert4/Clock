@@ -1,0 +1,130 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.*;
+
+public class Clock {
+    private JFrame frame;
+    private JLabel label;
+    private JLabel dateLabel;
+    private ClockDisplay clock;
+    private boolean clockRunning = false;
+    private TimerThread timerThread;
+
+    // konstruktor membuat GUI dan menyimpan waktu awal dari sistem
+    public Clock() {
+        makeFrame();
+        clock = new ClockDisplay();
+    }
+
+    // menandai jam berjalan, membuat timerthread mengontrol clock dan mulai timerthreadnya
+    public void start() {
+        clockRunning = true;
+        timerThread = new TimerThread(this);
+        timerThread.start();
+    }
+
+    // menandai clock berhenti running
+    public void stop() {
+        clockRunning = false;
+    }
+
+    // mengetahui clock masih running atau tidak
+    public boolean isRunning() {
+        return clockRunning;
+    }
+
+    // memajukan jam 1 langkah dengan sinkron ke waktu sistem dan memperbarui tampilan GUI
+    public void step() {
+        clock.updateFromSystemTime();
+        label.setText(clock.getTime());
+        dateLabel.setText(clock.getDate());
+    }
+
+    // tampilan showabout yang telah diedit
+    private void showAbout() {
+        JOptionPane.showMessageDialog(frame,
+            "Tugas Mingguan" + 
+            "Membuat Jam",
+            "Tambahan dengan detik, tanggal, suhu",
+            JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    // untuk keluar
+    private void quit() {
+        System.exit(0);
+    }
+
+    private void makeFrame() {
+        // frame utama
+        frame = new JFrame("Clock");
+        JPanel contentPane = (JPanel) frame.getContentPane();
+        contentPane.setBorder(new EmptyBorder(1, 60, 1, 60));
+        
+        // menu bar
+        makeMenuBar(frame);
+    
+        //layout utama
+        contentPane.setLayout(new BorderLayout(12, 12));
+    
+        // panel tengah
+        JPanel centerPanel = new JPanel(new BorderLayout());
+    
+        // label waktu
+        label = new JLabel("00:00:00", SwingConstants.CENTER);
+        Font displayFont = label.getFont().deriveFont(72.0f);
+        label.setFont(displayFont);
+        centerPanel.add(label, BorderLayout.CENTER);
+    
+        // label tanggal dan suhu   
+        dateLabel = new JLabel("dd/MM/yyyy             29°C", SwingConstants.CENTER);
+        Font dateFont = dateLabel.getFont().deriveFont(24.0f);
+        dateLabel.setFont(dateFont);
+        centerPanel.add(dateLabel, BorderLayout.SOUTH);
+    
+        // tambah panel tengah ke contentpane
+        contentPane.add(centerPanel, BorderLayout.CENTER);
+    
+        // toolbar di bagian bawah
+        JPanel toolbar = new JPanel();
+        JButton startButton = new JButton("Start");
+        startButton.addActionListener(e -> start());
+        toolbar.add(startButton);
+        contentPane.add(toolbar, BorderLayout.SOUTH);
+    
+        // set ukutan dan posisi frame
+        frame.pack();
+        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation(d.width / 2 - frame.getWidth() / 2, d.height / 2 - frame.getHeight() / 2);
+        frame.setVisible(true);
+    }
+
+    private void makeMenuBar(JFrame frame) {
+        final int SHORTCUT_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
+        // menu bar utama
+        JMenuBar menubar = new JMenuBar();
+        frame.setJMenuBar(menubar);
+
+        JMenu menu;
+        JMenuItem item;
+
+        // menu file
+        menu = new JMenu("File");
+        menubar.add(menu);
+
+        // about item
+        item = new JMenuItem("About Clock...");
+        item.addActionListener(e -> showAbout());
+        menu.add(item);
+
+        // garis pemisahnya
+        menu.addSeparator();
+
+        // untuk quitnya
+        item = new JMenuItem("Quit");
+        item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, SHORTCUT_MASK));
+        item.addActionListener(e -> quit());
+        menu.add(item);
+    }
+}
