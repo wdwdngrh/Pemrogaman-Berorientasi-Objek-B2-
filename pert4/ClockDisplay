@@ -1,0 +1,85 @@
+import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+// class untuk jam digital yang memiliki jam menit detik
+public class ClockDisplay
+{
+ 
+    private NumberDisplay hours;
+    private NumberDisplay minutes;
+    private NumberDisplay seconds;
+    private String displayString;
+    private String dateString;
+
+    // konstruktor default tanpa parameter 
+    public ClockDisplay()
+    {
+        hours = new NumberDisplay(24);
+        minutes = new NumberDisplay(60);
+        seconds = new NumberDisplay(60);
+        updateFromSystemTime();
+        /*updateDisplay();*/
+    }
+    
+    // konstruktor manual dengan parameter inputan
+    public ClockDisplay(int hour, int minute, int second)
+    {
+        hours = new NumberDisplay(24);
+        minutes = new NumberDisplay(60);
+        seconds = new NumberDisplay(60);
+        setTime(hour, minute, second);
+    }
+    
+    // menyamakan jam dengan waktu riil dari sistem komputer
+    public void updateFromSystemTime() {
+        LocalDateTime now = LocalDateTime.now();
+        hours.setValue(now.getHour());
+        minutes.setValue(now.getMinute());
+        seconds.setValue(now.getSecond());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        dateString = now.format(formatter);
+        updateDisplay();
+    }
+
+    /* memperbarui jam setiap dipanggil (sisa dari kode sebelumnya tetapi tidak dipakai karena updatenya langsung dari sistem)
+    public void timeTick()
+    {
+        /*seconds.increment();
+        if (seconds.getValue()==0) {
+            minutes.increment();
+            if (minutes.getValue() == 0) {
+                hours.increment();
+            }
+        }
+        updateDisplay();
+    }*/
+    
+    //men-set waktu sesuai parameter inputan
+    public void setTime(int hour, int minute, int second)
+    {
+        hours.setValue(hour);
+        minutes.setValue(minute);
+        seconds.setValue(second);
+        updateDisplay();
+    }
+    
+    // mengembalikan string waktu
+    public String getTime()
+    {
+        return displayString;
+    }
+    
+    // mengembalikan string tanggal
+    public String getDate() {
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return today.format(fmt) + "                29°C";
+    }
+    
+    // mengubah string waktu berdasarkan jam menit detik
+    private void updateDisplay()
+    {
+        displayString = hours.getDisplayValue() + ":" + minutes.getDisplayValue() + ":" + seconds.getDisplayValue();
+    }
+}
