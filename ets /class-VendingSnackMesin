@@ -1,0 +1,111 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+/**
+ * Write a description of class VendingSnackMesin here.
+ *
+ * @author (your name) = Willy Dava Nugraha
+ * @version (a version number or a date) = 14-10-2025
+ */
+public class VendingSnackMesin
+{
+    // instance variables - replace the example below with your own
+    private ArrayList<Produk> listProduk;
+    private Log logTransaksi;
+    /**
+     * Constructor for objects of class VendingSnackMesin
+     */
+    public VendingSnackMesin()
+    {
+        // initialise instance variables
+        this.listProduk = new ArrayList<>();
+        this.logTransaksi = new Log();
+    }
+
+    /**
+     * An example of a method - replace this comment with your own
+     *
+     * @param  y  a sample parameter for a method
+     * @return    the sum of x and y
+     */
+    public void tambahProduk(Produk produk){
+        listProduk.add(produk);    
+    }
+    
+    public void tampilMenu()
+    {
+        // put your code here
+        int i = 1;
+        System.out.println("\n==========Daftar Menu==========");
+        for (Produk produk : listProduk){
+            System.out.println("(" + i + ") " + produk.ambilNama() + "\tRp" + produk.ambilHarga() + "\tstok:  " + produk.ambilStok() );
+            i++;
+        }
+        System.out.println("(0) Keluar");
+        System.out.println("===============================");
+    }
+    
+    public boolean apaStokAdaBeli(Produk produk){
+        if (produk.ambilStok() > 0){
+            return true;
+        }
+        else {
+            System.out.println("Stok produk " + produk.ambilNama() + " habis. Silakan memilih produk yang lainnya.");
+            return false;
+        }
+    }
+    
+    public void transaksi(Produk produk){
+        Scanner scanner = new Scanner(System.in);
+        if (!apaStokAdaBeli(produk)){
+            return;
+        }
+        System.out.println("Anda memilih: " + produk.ambilNama());
+        System.out.println("Harga produk: Rp" + produk.ambilHarga());
+        System.out.print("Masukkan uang Anda: Rp");
+        int bayaran = scanner.nextInt();
+        if (bayaran >= produk.ambilHarga()){
+            produk.kuranginStok();
+            System.out.println("Pembayaran berhasil! Silakan mengambil produk Anda!");
+            logTransaksi.tambahLog(produk,bayaran);
+            for (Produk prod : listProduk){
+                prod.apaStokHabis();
+            }
+        }
+        else {
+            System.out.println("Pembayaran gagal");
+            //produk.apaStokHabis();
+            for (Produk prod : listProduk){
+                prod.apaStokHabis();
+            }
+        }
+    }
+    
+    public static void main (String[] args){
+        Scanner scanner = new Scanner(System.in);
+        VendingSnackMesin vmesin = new VendingSnackMesin(); 
+        vmesin.tambahProduk(new Produk("Keripik Singkong", 1, 5000));
+        vmesin.tambahProduk(new Produk("Keripik Kentang", 2, 10000));
+        vmesin.tambahProduk(new Produk("Teh Manis Botol", 3, 4000));
+        vmesin.tambahProduk(new Produk("Jus Jeruk Botol", 4, 7000));
+        vmesin.tambahProduk(new Produk("Kopi Susu Botol", 5, 4000));
+        int pilih = 0;
+        while (true){
+            vmesin.tampilMenu();
+            System.out.print("Silakan memilih produk (1-" + vmesin.listProduk.size() + "): ");
+            pilih = scanner.nextInt();
+            if (pilih == 0){
+                System.out.print("Program Vending Snack Mesin ditutup");
+                break;
+            }
+            else if (pilih >= 0 && pilih <= vmesin.listProduk.size()+1){
+                vmesin.transaksi(vmesin.listProduk.get(pilih-1));
+            }
+            else {
+                System.out.print("Pilihan invalid!");
+                System.out.print("Silakan memilih rentang (0-" + vmesin.listProduk.size() + ")");
+            }
+        }
+        vmesin.logTransaksi.tampilLog();
+        scanner.close();
+    }
+}
