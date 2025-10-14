@@ -91,7 +91,7 @@ public class VendingSnackMesin
         int pilih = 0;
         while (true){
             vmesin.tampilMenu();
-            System.out.print("Silakan memilih produk (1-" + vmesin.listProduk.size() + "): ");
+            System.out.print("Silakan memilih produk (0-" + vmesin.listProduk.size() + "): ");
             pilih = scanner.nextInt();
             if (pilih == 0){
                 System.out.print("Program Vending Snack Mesin ditutup");
