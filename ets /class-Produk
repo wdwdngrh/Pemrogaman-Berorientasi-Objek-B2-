@@ -1,0 +1,57 @@
+
+/**
+ * Write a description of class Produk here.
+ *
+ * @author (your name) = Willy Dava Nugraha
+ * @version (a version number or a date) = 14-10-2025
+ */
+public class Produk
+{
+    // instance variables - replace the example below with your own
+    private String nama;
+    private int stok;
+    private int harga;
+    
+    /**
+     * Constructor for objects of class Produk
+     */
+    public Produk(String nama, int stok, int harga)
+    {
+        // initialise instance variables
+        this.nama = nama;
+        this.stok = stok;
+        this.harga = harga;
+    }
+
+    /**
+     * An example of a method - replace this comment with your own
+     *
+     * @param  y  a sample parameter for a method
+     * @return    the sum of x and y
+     */
+    public String ambilNama()
+    {
+        // put your code here
+        return nama;
+    }
+    
+    public int ambilStok(){
+        return stok;
+    }
+    
+    public int ambilHarga(){
+        return harga;
+    }
+    
+    public void kuranginStok(){
+        this.stok--;
+    }
+    
+    public boolean apaStokHabis(){
+        if (this.stok == 0){
+            System.out.println("stok " + this.nama + " habis, admin dimohon refill");
+            return true;
+        }
+        return false;
+    }
+}
