@@ -1,0 +1,43 @@
+import java.util.ArrayList;
+/**
+ * Write a description of class Log here.
+ *
+ * @author (your name) = Willly Dava Nugraha
+ * @version (a version number or a date) = 14-10-2025
+ */
+
+public class Log
+{
+    // instance variables - replace the example below with your own
+    ArrayList<String> catatanLog;
+
+    /**
+     * Constructor for objects of class Log
+     */
+    public Log()
+    {
+        // initialise instance variables
+        this.catatanLog = new ArrayList<>();
+    }
+
+    /**
+     * An example of a method - replace this comment with your own
+     *
+     * @param  y  a sample parameter for a method
+     * @return    the sum of x and y
+     */
+    public void tambahLog(Produk produk, int bayaran)
+    {
+        // put your code here
+        String tambahCatatan = "Produk: " + produk.ambilNama() + ", Stok: " + produk.ambilStok() + ", Harga: " + produk.ambilHarga() + ", Bayaran: " + bayaran;
+        catatanLog.add(tambahCatatan);
+    }
+    
+    public void tampilLog(){
+        System.out.println("\n=====Log Transaksi=====");
+        for (String str : catatanLog){
+            System.out.println(str);
+        }
+        System.out.println("=======================");
+    }
+}
